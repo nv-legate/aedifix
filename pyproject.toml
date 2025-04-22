@@ -106,8 +106,6 @@ filterwarnings = ["error"]
 [tool.ruff]
 cache-dir = "./.cache/ruff"
 extend-exclude = [
-    "arch-*",
-    "*-arch",
     "venv",
     "*venv",
     "src/aedifix/templates/*",
@@ -242,7 +240,6 @@ section-order = [
     "future",
     "standard-library",
     "third-party",
-    "testing",
     "first-party",
     "local-folder",
 ]
@@ -259,4 +256,4 @@ context = 1
 
 [tool.pyright]
 stubPath = "src/typings"
-reportMissingModuleSource = false
+reportMissingModuleSource = true
