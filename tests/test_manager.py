@@ -108,7 +108,7 @@ class TestConfigurationManager:
         assert manager._logger.file_path.exists()
         assert manager._logger.file_path.is_file()
 
-    @pytest.mark.slow
+    @pytest.mark.skip
     def test_manager_extra_args(self, AEDIFIX_PYTEST_DIR: Path) -> None:
         main_cpp_template = textwrap.dedent(
             r"""

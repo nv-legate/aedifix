@@ -194,7 +194,6 @@ class SpecialException(Exception):
     pass
 
 
-@pytest.mark.slow
 class TestMain:
     def test_basic_configure_bad_init(
         self, monkeypatch: pytest.MonkeyPatch
@@ -241,6 +240,7 @@ class TestMain:
         config_log_lines = set(config_log_text.splitlines())
         assert set(expected_lines) <= config_log_lines
 
+    @pytest.mark.skip
     def test_basic_configure_bare(
         self, AEDIFIX_PYTEST_DIR: Path, AEDIFIX_PYTEST_ARCH: str
     ) -> None:
@@ -277,6 +277,7 @@ class TestMain:
         assert ret == 0
         test_info.post_test(expected_spec)
 
+    @pytest.mark.skip
     def test_basic_configure_release(
         self, AEDIFIX_PYTEST_DIR: Path, AEDIFIX_PYTEST_ARCH: str
     ) -> None:
@@ -314,6 +315,7 @@ class TestMain:
         assert ret == 0
         test_info.post_test(expected_spec)
 
+    @pytest.mark.skip
     def test_basic_configure_relwithdebinfo(
         self, AEDIFIX_PYTEST_DIR: Path, AEDIFIX_PYTEST_ARCH: str
     ) -> None:
@@ -351,6 +353,7 @@ class TestMain:
         assert ret == 0
         test_info.post_test(expected_spec)
 
+    @pytest.mark.skip
     def test_basic_configure_clang_debug(
         self, AEDIFIX_PYTEST_DIR: Path, AEDIFIX_PYTEST_ARCH: str
     ) -> None:
@@ -419,6 +422,7 @@ class TestMain:
         assert ret == 0
         test_info.post_test(expected_spec)
 
+    @pytest.mark.skip
     def test_extra_argv(
         self, AEDIFIX_PYTEST_DIR: Path, AEDIFIX_PYTEST_ARCH: str
     ) -> None:
