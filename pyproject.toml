@@ -28,7 +28,6 @@ dynamic = ["version"]
 test = [
     "coverage",
     "mypy>=0.961",
-    "psutil",
     "pytest-cov",
     "pytest",
 ]
@@ -48,7 +47,6 @@ exclude_lines = [
 
 [tool.mypy]
 python_version = "3.11"
-mypy_path = "./src/python/typings/"
 cache_dir = "./.cache/mypy"
 
 pretty = true
@@ -91,9 +89,6 @@ warn_unused_configs = true
 
 [[tool.mypy.overrides]]
 # ignore certain auto-generated and utility files
-module = [
-    "legate._version",
-]
 ignore_errors = true
 
 [tool.pytest.ini_options]
