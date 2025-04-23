@@ -1,0 +1,249 @@
+# SPDX-FileCopyrightText: Copyright (c) 2021-2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+[build-system]
+requires = ["rich", "setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aedifix"
+authors = [{name = "NVIDIA Corporation"}]
+license = { text = "Apache-2.0" }
+description = "aedifix - Build system for Legate libraries"
+classifiers = [
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13"
+]
+dependencies = [
+    "rich",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+test = [
+    "coverage",
+    "mypy>=0.961",
+    "pytest-cov",
+    "pytest",
+]
+
+[project.urls]
+homepage = "https://github.com/nv-legate/aedifix"
+
+[tool.setuptools_scm]
+write_to = "src/aedifix/_version.py"
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "@abstract"
+]
+
+[tool.mypy]
+python_version = "3.11"
+cache_dir = "./.cache/mypy"
+
+pretty = true
+show_error_codes = true
+show_error_context = true
+show_column_numbers = true
+
+namespace_packages = true
+ignore_missing_imports = false
+
+disallow_any_unimported = true
+disallow_any_expr = false
+disallow_any_decorated = false
+disallow_any_explicit = false
+disallow_any_generics = true
+disallow_subclassing_any = true
+
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+strict_optional = true
+
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_return_any = false
+warn_unreachable = true
+
+ignore_errors = false
+
+allow_untyped_globals = false
+allow_redefinition = false
+implicit_reexport = true
+strict_equality = true
+
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+cache_dir = "./.cache/pytest"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')"
+]
+filterwarnings = ["error"]
+
+[tool.ruff]
+cache-dir = "./.cache/ruff"
+extend-exclude = [
+    "venv",
+    "*venv",
+    "src/aedifix/templates/*",
+]
+line-length = 79
+src = [".", "src/python/legate"]
+
+[tool.ruff.format]
+skip-magic-trailing-comma = true
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    # Don't warn about missing trailing commas, the formatter will insert those for us.
+    "COM812",
+    # Don't care about annotations, we let mypy do that for us.
+    "ANN",
+    # Allow TODO's.
+    "FIX",
+    # Ruff is a bit too opinionated about the format of TODO statements.
+    "TD",
+    # We well and truly don't care about timezones
+    "DTZ",
+    "BLE001",
+    # Keep commented-out code for now, there are false-positives.
+    "ERA001",
+    # Allow use of assert.
+    "S101",
+    # Always prefer absolute imports...
+    "TID252",
+    # Many false positives.
+    "S603",
+    # Disable the naming-convention checks. This is "dangerous" insofar that we need to
+    # manually enforce this, but there are so many manual (but reasonable!) violations in
+    # there currently that littering the repo with noqa N80 seems dumb.
+    "N80",
+    "N81",
+    # We don't document modules
+    "D100",
+    "D101",
+    "D104",
+    # We want a blank line after descriptions, but this has false positives when it comes
+    # to summaries that are ever so slightly longer than 1 line.
+    "D205",
+    # Imperative mood checker is a bit finnicky
+    "D401",
+    # We don't care if hashes are cryptographically secure
+    "S311",
+    # We don't care about using absolute paths for all executables. When we say "run conda
+    # foo bar baz", we don't care where conda came from
+    "S607",
+    # Let mypy type-check the __enter__ and __exit__ functions
+    "PYI036",
+    # We don't always *need* to `raise NewException(...) from old_exn`
+    "B904",
+    # Let the formatter concatenate strings
+    "ISC001",
+    # Doing typing.cast("SomeType", ...) instead of typing.cast(SomeType, ...) looks
+    # bad. The docs say this is for consistency (sometimes you cannot import SomeType due
+    # to circular import), and also because it might be slow to evaluate complex type
+    # expressions at runtime but...
+    #
+    # None of our python code is in a hot-loop, and typing.cast() is so seldom used that
+    # this is OK to silence.
+    "TC006"
+]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"__init__.py" = [
+    "F401",
+]
+
+"src/**/*.py" = [
+    "D101",
+    "D102",
+    "D103",
+    "D105",
+    "D106",
+    # OK to pass raw boolean params in config, as this is usually done when setting cmake
+    # variables
+    "FBT003",
+]
+
+"tests/**/*.py" = [
+    # asserts allowed in tests...
+    "S101",
+    # Don't care about booleans as positional arguments in tests, e.g. via
+    # @pytest.mark.parametrize()
+    "FBT",
+    # Test modules don't need docstrings...
+    "D100",
+    # ...and neither do classes...
+    "D101",
+    # ...or methods...
+    "D102",
+    # ...or functions...
+    "D103",
+    # ...or packages...
+    "D104",
+    # ...or magic methods...
+    "D105",
+    # ...or nested classes...
+    "D106",
+    # ...or __init__ statements
+    "D107",
+    # Tests are allowed to access private members
+    "SLF001",
+    # TODO(jfaibussowit) enable this eventually...
+    "PT007",
+    # Ignore magic values in tests, there are simply far too many to fix...
+    "PLR2004",
+    # Tests can have unused function params, since they might be fixtures
+    "ARG001",
+    "ARG002",
+    # Tests can have a lot of arguments if many of them are fixtures
+    "PLR0913",
+    # OK to use np.random.random, we don't care about using the new Generator class
+    "NPY002",
+]
+
+[tool.ruff.lint.flake8-pytest-style]
+parametrize-values-type = "tuple"
+
+[tool.ruff.lint.isort]
+known-third-party = []
+known-first-party = ["aedifix"]
+length-sort-straight = true
+combine-as-imports = true
+split-on-trailing-comma = false
+required-imports = ["from __future__ import annotations"]
+section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "local-folder",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+ignore-decorators = ["typing.overload"]
+
+[tool.codespell]
+# This needs to be a list like so, not an array. Codespell does not parse arrays
+# correctly.
+builtin = "clear,rare,informal,names,en-GB_to_en-US"
+context = 1
+
+[tool.pyright]
+stubPath = "src/typings"
+pythonVersion = "3.11"
+reportMissingModuleSource = true

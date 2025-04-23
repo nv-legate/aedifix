@@ -1,0 +1,49 @@
+---
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-json  # checks that all json files have proper syntax
+      - id: check-toml  # checks that all toml files have proper syntax
+      - id: debug-statements  # check for debug statements
+        exclude: '^(src/aedifix/main.py|src/aedifix/templates/.*)$'  # intentional
+      - id: end-of-file-fixer  # check all files end in a newline
+      - id: pretty-format-json
+        args: ['--autofix', '--indent=4']
+      - id: trailing-whitespace  # remove trailing whitespace
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.4.1
+    hooks:
+      - id: codespell
+        args: ["--toml=./pyproject.toml", "--write-changes"]
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.4
+    hooks:
+      - id: ruff-format
+      - id: ruff
+        args: ["--config=./pyproject.toml", "--fix"]
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: 'v1.15.0'
+    hooks:
+      - id: mypy
+        pass_filenames: false
+        args: ['src', 'tests']
+        additional_dependencies: [pytest, rich]
+  - repo: https://github.com/netromdk/vermin
+    rev: 'v1.6.0'
+    hooks:
+      - id: vermin
+        args: ['--config-file', './setup.cfg']
+  - repo: https://github.com/RobertCraigie/pyright-python
+    rev: v1.1.399
+    hooks:
+    - id: pyright
+      pass_filenames: false
+      args: ['src', 'tests']
+      additional_dependencies: [pytest, rich]
+
+ci:
+  autoupdate_schedule: quarterly
+
+default_language_version:
+  python: python3
