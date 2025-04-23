@@ -197,12 +197,9 @@ def classify_callable(
         else:
             class_obj = fn.__self__.__class__
         assert hasattr(class_obj, "__name__")  # appease mypy
+        qualname = f"{class_obj.__name__}.{fn.__name__}"  # pyright: ignore[reportAttributeAccessIssue]
         if fully_qualify:
-            qualname = (
-                f"{class_obj.__module__}.{class_obj.__name__}.{fn.__name__}"
-            )
-        else:
-            qualname = f"{class_obj.__name__}.{fn.__name__}"
+            qualname = f"{class_obj.__module__}.{qualname}"
         func_obj = fn.__func__
     elif inspect.isfunction(fn):
         module = inspect.getmodule(fn)

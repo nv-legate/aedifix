@@ -25,7 +25,7 @@ ALL_DEBUG_CMAKE_FLAGS = ("", "--debug-find", "--trace", "--trace-expand")
 
 def gen_expected_flags() -> Iterator[list[str]]:
     for i in range(len(ALL_DEBUG_CMAKE_FLAGS)):
-        ret = list(ALL_DEBUG_CMAKE_FLAGS[: i + 1])
+        ret = [str(x) for x in ALL_DEBUG_CMAKE_FLAGS[: i + 1]]
         ret.remove("")
         yield ret
 

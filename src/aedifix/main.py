@@ -83,6 +83,8 @@ def _basic_configure_impl(
 
     post_mortem = any(ON_ERROR_DEBUGGER_FLAG in arg for arg in argv)
     excn: Exception | None = None
+    title: str = ""
+
     # If the following throws, then something is seriously beansed. Better to
     # eschew pretty-printing and just allow the entire exception to be printed.
     config = ConfigurationManager(argv, MainPackageType)

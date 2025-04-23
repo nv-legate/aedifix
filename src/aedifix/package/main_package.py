@@ -33,7 +33,7 @@ from ..util.utility import (
 from .package import Package
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
+    from collections.abc import Iterable, Sequence
 
     from ..manager import ConfigurationManager
 
@@ -189,7 +189,9 @@ class DebugConfigureValue(IntEnum):
         list[DebugConfigureFlag]
             The CMake flags.
         """
-        raw_flags = (f.to_flag() for f in type(self) if self >= f)
+        raw_flags: Iterable[DebugConfigureFlag] = (
+            f.to_flag() for f in type(self) if self >= f
+        )
         return [f for f in raw_flags if f]  # Need to weed out NONE
 
 

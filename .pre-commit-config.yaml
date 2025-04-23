@@ -28,12 +28,19 @@ repos:
       - id: mypy
         pass_filenames: false
         args: ['src', 'tests']
-        additional_dependencies: [pytest, pytest_mock, types-psutil, rich]
+        additional_dependencies: [pytest, rich]
   - repo: https://github.com/netromdk/vermin
     rev: 'v1.6.0'
     hooks:
       - id: vermin
         args: ['--config-file', './setup.cfg']
+  - repo: https://github.com/RobertCraigie/pyright-python
+    rev: v1.1.399
+    hooks:
+    - id: pyright
+      pass_filenames: false
+      args: ['src', 'tests']
+      additional_dependencies: [pytest, rich]
 
 ci:
   autoupdate_schedule: quarterly

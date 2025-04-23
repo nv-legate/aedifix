@@ -36,7 +36,7 @@ class TestCLArg:
     @pytest.mark.parametrize("name", ("foo", "bar"))
     @pytest.mark.parametrize("value", (True, 1, 2.0, "three"))
     @pytest.mark.parametrize("cl_set", (True, False))
-    def test_eq(self, name: str, value: _T, cl_set: bool) -> None:
+    def test_eq(self, name: str, value: object, cl_set: bool) -> None:
         lhs = CLArg(name=name, value=value, cl_set=cl_set)
         rhs = CLArg(name=name, value=value, cl_set=cl_set)
         assert lhs == rhs

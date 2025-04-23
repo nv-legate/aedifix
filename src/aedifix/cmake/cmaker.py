@@ -19,7 +19,6 @@ if TYPE_CHECKING:
     from .cmake_flags import CMakeFlagBase
 
     _T = TypeVar("_T")
-    _CMakeFlagT = TypeVar("_CMakeFlagT", bound=CMakeFlagBase)
 
 
 class CMakeCommandSpec(TypedDict):
@@ -38,7 +37,7 @@ class CMaker:
         self._args: dict[str, CMakeFlagBase] = {}
 
     def register_variable(
-        self, manager: ConfigurationManager, var: _CMakeFlagT
+        self, manager: ConfigurationManager, var: CMakeFlagBase
     ) -> None:
         r"""Register a CMake variable.
 
@@ -77,7 +76,7 @@ class CMaker:
             raise WrongOrderError(msg)
 
     def set_value(
-        self, manager: ConfigurationManager, name: str, value: _T
+        self, manager: ConfigurationManager, name: str, value: object
     ) -> None:
         r"""Set a CMake variable's value.
 

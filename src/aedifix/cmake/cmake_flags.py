@@ -8,13 +8,10 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from shlex import quote as shlex_quote
 from types import GeneratorType
-from typing import TYPE_CHECKING, Any, Final, TypeVar
+from typing import TYPE_CHECKING, Any, Final
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
-
-
-_T = TypeVar("_T")
 
 
 class CMakeFlagBase(ABC):
@@ -27,7 +24,7 @@ class CMakeFlagBase(ABC):
     def __init__(
         self,
         name: str,
-        value: _T | None = None,
+        value: object | None = None,
         prefix: str = "-D",
         type_str: str = "STRING",
     ) -> None:
@@ -101,22 +98,22 @@ class CMakeFlagBase(ABC):
         return self._value
 
     @value.setter
-    def value(self, val: _T) -> None:
+    def value(self, val: object) -> None:
         self._value = self._sanitize_value(val)
 
     @abstractmethod
-    def _sanitize_value(self, val: _T) -> Any:
+    def _sanitize_value(self, value: object) -> Any:
         r"""The callback hook for value setter, which must be overridden by
         derived classes.
 
         Parameters
         ----------
-        val : Any
+        value : Any
             The value to assign to `self._value`.
 
         Returns
         -------
-        val : SomeType
+        value : SomeType
             The sanitized value.
 
         Raises
@@ -228,8 +225,7 @@ class CMakeList(CMakeFlagBase):
     ) -> None:
         super().__init__(name=name, value=value, prefix=prefix)
 
-    @staticmethod
-    def _sanitize_value(value: Any) -> list[str]:
+    def _sanitize_value(self, value: Any) -> list[str]:
         if isinstance(value, (list, tuple, GeneratorType)):
             return list(value)
         if isinstance(value, str):
@@ -261,8 +257,7 @@ class CMakeBool(CMakeFlagBase):
             name=name, value=value, prefix=prefix, type_str="BOOL"
         )
 
-    @staticmethod
-    def _sanitize_value(value: Any) -> bool:
+    def _sanitize_value(self, value: Any) -> bool:
         if isinstance(value, bool):
             return value
 
@@ -307,8 +302,7 @@ class CMakeInt(CMakeFlagBase):
     ) -> None:
         super().__init__(name=name, value=value, prefix=prefix)
 
-    @staticmethod
-    def _sanitize_value(value: Any) -> int:
+    def _sanitize_value(self, value: Any) -> int:
         if isinstance(value, (bool, str, float, int)):
             return int(value)
         raise TypeError(type(value))
@@ -320,8 +314,7 @@ class CMakeString(CMakeFlagBase):
     ) -> None:
         super().__init__(name=name, value=value, prefix=prefix)
 
-    @staticmethod
-    def _sanitize_value(value: Any) -> str:
+    def _sanitize_value(self, value: Any) -> str:
         if isinstance(value, str):
             return value
         raise TypeError(type(value))
@@ -363,8 +356,7 @@ class CMakeExecutable(CMakeFlagBase):
             name=name, value=value, prefix=prefix, type_str="FILEPATH"
         )
 
-    @staticmethod
-    def _sanitize_value(value: Any) -> Path | None:
+    def _sanitize_value(self, value: Any) -> Path | None:
         if not isinstance(value, (str, Path)):
             raise TypeError(type(value))
 

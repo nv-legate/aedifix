@@ -32,7 +32,7 @@ class DummyManager(ConfigurationManager):
         pass
 
     def log_execute_command(
-        self, cmd: Sequence[_T], live: bool = False
+        self, command: Sequence[_T], *, live: bool = False
     ) -> Any:
         pass
 
