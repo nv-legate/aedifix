@@ -87,10 +87,6 @@ strict_equality = true
 
 warn_unused_configs = true
 
-[[tool.mypy.overrides]]
-# ignore certain auto-generated and utility files
-ignore_errors = true
-
 [tool.pytest.ini_options]
 cache_dir = "./.cache/pytest"
 markers = [
