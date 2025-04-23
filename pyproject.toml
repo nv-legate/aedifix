@@ -12,8 +12,6 @@ license = { text = "Apache-2.0" }
 description = "aedifix - Build system for Legate libraries"
 classifiers = [
     "Intended Audience :: Developers",
-    "Topic :: Database",
-    "Topic :: Scientific/Engineering",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
