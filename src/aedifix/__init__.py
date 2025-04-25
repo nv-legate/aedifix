@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 from . import cmake, package, util
+from ._version import version as __version__
 from .cmake import (
     CMAKE_VARIABLE,
     CMakeBool,
@@ -37,4 +38,5 @@ __all__ = (
     "cmake",
     "package",
     "util",
+    "__version__"
 )
