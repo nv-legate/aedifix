@@ -36,6 +36,8 @@ _default_gen = _determine_default_generator()
 
 
 class CMake(Package):
+    name = "CMake"
+
     CMAKE_COMMAND: Final = ConfigArgument(
         name="--cmake-executable",
         spec=ArgSpec(
@@ -67,7 +69,7 @@ class CMake(Package):
         manager : ConfigurationManager
             The configuration manager to manage this package.
         """
-        super().__init__(manager=manager, name="CMake", always_enabled=True)
+        super().__init__(manager=manager, always_enabled=True)
 
     def configure_cmake_version(self) -> None:
         r"""Determine the version of the cmake executable.

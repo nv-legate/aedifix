@@ -30,6 +30,12 @@ class Dependencies(Namespace):
 
 
 class Package(Configurable):
+    #: A name for the package, e.g. 'CUDA'.
+    name: str
+
+    # Other package (types) that this package depends on
+    dependencies: tuple[type[Package], ...] = ()
+
     __slots__ = "_always_enabled", "_dep_types", "_deps", "_name", "_state"
 
     @dataclass(slots=True, frozen=True)
@@ -56,12 +62,7 @@ class Package(Configurable):
             return self.disabled() and (not self.explicit)
 
     def __init__(
-        self,
-        manager: ConfigurationManager,
-        name: str,
-        *,
-        always_enabled: bool = False,
-        dependencies: tuple[type[Package], ...] = (),
+        self, manager: ConfigurationManager, *, always_enabled: bool = False
     ) -> None:
         r"""Construct a Package.
 
@@ -69,8 +70,6 @@ class Package(Configurable):
         ----------
         manager : ConfigurationManager
             The configuration manager to manage this package.
-        name : str
-            The name of the package, e.g. 'CUDA'.
         always_enabled : bool, False
             Whether this package should be considered unconditionally enabled.
         """
@@ -81,22 +80,10 @@ class Package(Configurable):
         if isinstance(self, MainPackage):
             always_enabled = True
 
-        self._name = name
         self._state = Package.EnableState(value=always_enabled)
         self._always_enabled = always_enabled
-        self._dep_types = dependencies
+        self._dep_types = self.dependencies
         self._deps: Dependencies | None = None
-
-    @property
-    def name(self) -> str:
-        r"""Get the name of the package.
-
-        Returns
-        -------
-        name : str
-            The name of the package, e.g. 'Legion'.
-        """
-        return self._name
 
     @property
     def state(self) -> EnableState:

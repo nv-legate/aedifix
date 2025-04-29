@@ -364,7 +364,6 @@ class MainPackage(Package, ABC):
     def __init__(  # noqa: PLR0913
         self,
         manager: ConfigurationManager,
-        name: str,
         argv: Sequence[str],
         arch_name: str,
         project_dir_name: str,
@@ -372,7 +371,6 @@ class MainPackage(Package, ABC):
         project_config_file_template: Path,
         project_src_dir: Path | None = None,
         default_arch_file_path: Path | None = None,
-        dependencies: tuple[type[Package], ...] = (),
     ) -> None:
         r"""Construct the MainPackage.
 
@@ -380,8 +378,6 @@ class MainPackage(Package, ABC):
         ----------
         manager : ConfigurationManager
             The configuration manager that will manage the main package.
-        name : str
-            The name of the main package, e.g. 'Legate'.
         argv : Sequence[str]
             The command line options.
         arch_name : str
@@ -409,12 +405,7 @@ class MainPackage(Package, ABC):
             If the project arch value is set (either from command line or
             environment variable) but empty.
         """
-        super().__init__(
-            manager=manager,
-            name=name,
-            always_enabled=True,
-            dependencies=dependencies,
-        )
+        super().__init__(manager=manager, always_enabled=True)
         assert not arch_name.startswith("-")
         assert not arch_name.endswith("_")
         assert arch_name.isupper()

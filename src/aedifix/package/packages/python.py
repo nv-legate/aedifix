@@ -16,6 +16,8 @@ if TYPE_CHECKING:
 
 
 class Python(Package):
+    name = "Python"
+
     With_Python: Final = ConfigArgument(
         name="--with-python",
         spec=ArgSpec(
@@ -26,7 +28,7 @@ class Python(Package):
     )
 
     def __init__(self, manager: ConfigurationManager) -> None:
-        super().__init__(manager=manager, name="Python")
+        super().__init__(manager=manager)
 
     def configure_lib_version_and_paths(self) -> None:
         r"""Determine the Python library version and its location."""
