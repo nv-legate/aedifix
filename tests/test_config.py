@@ -32,8 +32,28 @@ class TestConfigFile:
         assert config.template_file.exists()
         assert config.template_file.is_file()
         assert config.template_file == template
-
+        assert (
+            config.project_variables_file.name == template.with_suffix("").name
+        )
         assert config._default_subst == {"PYTHON_EXECUTABLE": sys.executable}
+
+    @pytest.mark.parametrize(
+        ("base", "expected"),
+        (
+            ("foo.bar.baz.in", "foo.bar.baz"),
+            ("foo.bar", "foo.bar"),
+            ("foo", "foo"),
+        ),
+    )
+    def test_project_variables_file(
+        self, manager: DummyManager, tmp_path: Path, base: str, expected: str
+    ) -> None:
+        template = tmp_path / base
+        template.touch()
+
+        config = ConfigFile(manager=manager, config_file_template=template)
+
+        assert config.project_variables_file.name == expected
 
 
 if __name__ == "__main__":
