@@ -50,7 +50,7 @@ class ConfigFile(Configurable):
         config_file = self.template_file
         if config_file.suffix == ".in":
             # remove the trailing .in
-            config_file = config_file.with_suffix("") 
+            config_file = config_file.with_suffix("")
 
         self._project_variables_file = self.project_arch_dir / config_file.name
         self._default_subst = {"PYTHON_EXECUTABLE": sys.executable}
