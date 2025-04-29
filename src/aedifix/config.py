@@ -28,6 +28,7 @@ class ConfigFile(Configurable):
     __slots__ = (
         "_cmake_configure_file",
         "_config_file_template",
+        "_project_variables_file",
         "_default_subst",
     )
 
@@ -45,6 +46,14 @@ class ConfigFile(Configurable):
         """
         super().__init__(manager=manager)
         self._config_file_template = config_file_template.resolve()
+
+        config_file = self.template_file.name
+        if config_file.suffix == ".in":
+            config_file = config_file.with_suffix(
+                ""
+            )  # removes the trailing .in
+
+        self._project_variables_file = self.project_arch_dir / config_file
         self._default_subst = {"PYTHON_EXECUTABLE": sys.executable}
 
     @property
@@ -72,7 +81,7 @@ class ConfigFile(Configurable):
         The file is not guaranteed to exist, or be up to date. Usually it is
         created/refreshed during finalization of this object.
         """
-        return self.project_arch_dir / "gmakevariables"
+        return self._project_variables_file
 
     def _read_entire_cmake_cache(self, cmake_cache: Path) -> dict[str, str]:
         r"""Read a CMakeCache.txt and convert all of the cache values to
