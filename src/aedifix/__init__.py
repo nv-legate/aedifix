@@ -4,8 +4,8 @@
 from __future__ import annotations
 
 from . import cmake, package, util
-from ._version import (
-    version as __version__,  # pyright: ignore [import-not-found]
+from ._version import (  # pyright: ignore [import-not-found]
+    version as __version__,
 )
 from .cmake import (
     CMAKE_VARIABLE,
