@@ -34,9 +34,9 @@ __all__ = (
     "ConfigurationManager",
     "MainPackage",
     "Package",
+    "__version__",
     "basic_configure",
     "cmake",
     "package",
     "util",
-    "__version__",
 )
