@@ -5,6 +5,7 @@ repos:
     hooks:
       - id: check-json  # checks that all json files have proper syntax
       - id: check-toml  # checks that all toml files have proper syntax
+      - id: check-yaml
       - id: debug-statements  # check for debug statements
         exclude: '^(src/aedifix/main.py|src/aedifix/templates/.*)$'  # intentional
       - id: end-of-file-fixer  # check all files end in a newline
