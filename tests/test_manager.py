@@ -85,7 +85,7 @@ class TestConfigurationManager:
         orig_argv = deepcopy(manager.argv)
         assert len(manager._modules) == 1
         manager.setup()
-        assert len(manager._modules) > 1
+        assert len(manager._modules) == 1
         assert manager.argv == orig_argv
         assert (
             CLArg(

@@ -3,14 +3,15 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
-      - id: check-json  # checks that all json files have proper syntax
-      - id: check-toml  # checks that all toml files have proper syntax
-      - id: debug-statements  # check for debug statements
+      - id: check-json
+      - id: check-toml
+      - id: check-yaml
+      - id: debug-statements
         exclude: '^(src/aedifix/main.py|src/aedifix/templates/.*)$'  # intentional
-      - id: end-of-file-fixer  # check all files end in a newline
+      - id: end-of-file-fixer
       - id: pretty-format-json
         args: ['--autofix', '--indent=4']
-      - id: trailing-whitespace  # remove trailing whitespace
+      - id: trailing-whitespace
   - repo: https://github.com/codespell-project/codespell
     rev: v2.4.1
     hooks:
@@ -41,6 +42,13 @@ repos:
       pass_filenames: false
       args: ['src', 'tests']
       additional_dependencies: [pytest, rich]
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.7
+    hooks:
+      - id: actionlint
+        types: [yaml]
+        files: ^\.github/workflows/
+        entry: env SHELLCHECK_OPTS="--enable=all --severity=style" actionlint
 
 ci:
   autoupdate_schedule: quarterly

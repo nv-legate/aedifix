@@ -20,13 +20,14 @@ _tmp_path: Final = Path(_tmp_file.name)
 
 
 class DummyMainModule(DummyMainPackage):
+    name = "DummyMainModule"
+
     def __init__(
         self, manager: ConfigurationManager, argv: Sequence[str]
     ) -> None:
         super().__init__(
             manager=manager,
             argv=argv,
-            name="DummyMainModule",
             arch_name="AEDIFIX_PYTEST_ARCH",
             project_dir_name="AEDIFIX_PYTEST_DIR",
             project_dir_value=Path(environ["AEDIFIX_PYTEST_DIR"]),

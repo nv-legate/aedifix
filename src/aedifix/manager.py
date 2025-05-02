@@ -25,7 +25,6 @@ from typing import TYPE_CHECKING, Any, Final, ParamSpec, TypeVar
 from .cmake.cmaker import CMaker
 from .config import ConfigFile
 from .logger import Logger
-from .package import packages
 from .reconfigure import Reconfigure
 from .util.argument_parser import ConfigArgument
 from .util.callables import classify_callable, get_calling_function
@@ -495,6 +494,29 @@ class ConfigurationManager:
             align="left",
         )
 
+    def _collect_deps(self) -> set[type[Package]]:
+        """Collect all transitive dependencies of the main package.
+
+        Returns
+        -------
+        dependencies: set[type[Package]]
+            The collected dependencies.
+
+        """
+        # perform an iterative Depth-First Search to collect all dependencies
+        # that are reachable starting from the main package dependencies.
+        # ref: https://en.wikipedia.org/wiki/Depth-first_search#Pseudocode
+
+        seen: set[type[Package]] = set()
+        stack: list[type[Package]] = list(self._main_package.dependencies)
+
+        while stack:
+            if (dep := stack.pop()) not in seen:
+                seen.add(dep)
+                stack.extend(x for x in dep.dependencies if x not in seen)
+
+        return seen
+
     # Member variable access
     @property
     def argv(self) -> tuple[str, ...]:
@@ -954,9 +976,9 @@ class ConfigurationManager:
         """
         self._setup_log()
         self.log_execute_func(self._log_git_info)
-        self._modules.extend(
-            self.log_execute_func(packages.load_packages, self)
-        )
+
+        packages = self.log_execute_func(self._collect_deps)
+        self._modules.extend(cls(self) for cls in packages)
 
         # Sort the modules alphabetically for the parsing of arguments, but
         # keep the main package on top.
