@@ -495,6 +495,18 @@ class ConfigurationManager:
         )
 
     def _collect_deps(self) -> set[type[Package]]:
+        """Collect all transitive dependencies of the main package.
+
+        Returns
+        -------
+        dependencies: set[type[Package]]
+            The collected dependencies.
+
+        """
+        # perform an iterative Depth-First Search to collect all declared
+        # dependencies, starting from the package.
+        # ref: https://en.wikipedia.org/wiki/Depth-first_search#Pseudocode
+
         seen: set[type[Package]] = set()
         stack: list[type[Package]] = list(self._main_package.dependencies)
 
