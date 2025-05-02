@@ -146,6 +146,10 @@ class DebugConfigureValue(IntEnum):
     TRACE = 2
     TRACE_EXPAND = 3
 
+    # Enum formatatting changed in 3.11, this is only needed for 3.10
+    def __str__(self) -> str:
+        return str(int(self.value))
+
     @classmethod
     def from_string(cls, str_val: str) -> DebugConfigureValue:
         return cls(int(str_val))
