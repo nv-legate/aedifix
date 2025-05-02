@@ -19,6 +19,7 @@ classifiers = [
 ]
 dependencies = [
     "rich",
+    "typing_extensions",
 ]
 dynamic = ["version"]
 
