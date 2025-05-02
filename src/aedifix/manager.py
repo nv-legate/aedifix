@@ -503,8 +503,8 @@ class ConfigurationManager:
             The collected dependencies.
 
         """
-        # perform an iterative Depth-First Search to collect all declared
-        # dependencies, starting from the package.
+        # perform an iterative Depth-First Search to collect all dependencies
+        # that are reachable starting from the main package dependencies.
         # ref: https://en.wikipedia.org/wiki/Depth-first_search#Pseudocode
 
         seen: set[type[Package]] = set()
