@@ -22,6 +22,7 @@ except ModuleNotFoundError as mnfe:
     raise RuntimeError(msg) from mnfe
 
 import contextlib
+from typing import Self
 
 from rich.align import Align, AlignMethod
 from rich.console import Console, RenderableType
@@ -29,7 +30,6 @@ from rich.live import Live
 from rich.panel import Panel
 from rich.rule import Rule
 from rich.table import Table
-from typing_extensions import Self
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
