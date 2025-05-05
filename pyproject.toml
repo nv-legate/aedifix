@@ -19,7 +19,6 @@ classifiers = [
 ]
 dependencies = [
     "rich",
-    "typing_extensions",
 ]
 dynamic = ["version"]
 requires-python = ">=3.11"
