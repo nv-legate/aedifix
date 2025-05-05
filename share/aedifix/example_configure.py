@@ -1,12 +1,3 @@
-# aedifix
-
-# Bootstrapping aedifix in your build
-
-Assuming your main package is called `MyMainPacakge` and lives in `my_main_package.py`,
-you may use the following snippet to create a `configure` script that automatically
-bootstraps `aedifix` on first call.
-
-```python
 #!/usr/bin/env python3
 from __future__ import annotations
 
@@ -61,5 +52,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-
-```
