@@ -3,8 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from __future__ import annotations
 
-from . import packages
 from .main_package import MainPackage
 from .package import Package
 
-__all__ = ("MainPackage", "Package", "packages")
+__all__ = ("MainPackage", "Package")

@@ -7,12 +7,12 @@ import os
 import shutil
 from typing import TYPE_CHECKING, Final
 
-from ...cmake import CMAKE_VARIABLE, CMakePath, CMakeString
-from ...util.argument_parser import ArgSpec, ConfigArgument
+from ..cmake import CMAKE_VARIABLE, CMakePath, CMakeString
 from ..package import Package
+from ..util.argument_parser import ArgSpec, ConfigArgument
 
 if TYPE_CHECKING:
-    from ...manager import ConfigurationManager
+    from ..manager import ConfigurationManager
 
 
 _cmake_exe = shutil.which("cmake")
