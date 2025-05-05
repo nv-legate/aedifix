@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from __future__ import annotations
 
-from . import cmake, package, util
+from . import cmake, package, packages, util
 from ._version import version as __version__
 from .cmake import (
     CMAKE_VARIABLE,
@@ -38,5 +38,6 @@ __all__ = (
     "basic_configure",
     "cmake",
     "package",
+    "packages",
     "util",
 )
