@@ -33,7 +33,9 @@ def gen_expected_flags() -> Iterator[list[str]]:
 class TestDebugConfigureValue:
     @pytest.mark.parametrize(
         ("val", "expected"),
-        list(zip(ALL_DEBUG_CONFIGURE_FLAGS, ALL_DEBUG_CMAKE_FLAGS)),
+        list(
+            zip(ALL_DEBUG_CONFIGURE_FLAGS, ALL_DEBUG_CMAKE_FLAGS, strict=False)
+        ),
     )
     def test_flag_matches(
         self, val: DebugConfigureValue, expected: str
@@ -50,7 +52,9 @@ class TestDebugConfigureValue:
 
     @pytest.mark.parametrize(
         ("val", "expected"),
-        list(zip(ALL_DEBUG_CONFIGURE_FLAGS, gen_expected_flags())),
+        list(
+            zip(ALL_DEBUG_CONFIGURE_FLAGS, gen_expected_flags(), strict=False)
+        ),
     )
     def test_to_flags(
         self, val: DebugConfigureValue, expected: list[str]
