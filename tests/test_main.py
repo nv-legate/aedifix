@@ -159,7 +159,7 @@ class TestInfo:
         with self.cmakecache_txt.open() as fd:
             # Exploit the fact that zip() will end when the shortest iterator
             # is exhausted (i.e. cache_header_lines in this case)
-            for line, expected in zip(fd, cache_header_lines):
+            for line, expected in zip(fd, cache_header_lines, strict=False):
                 assert line == expected
                 idx += 1
         # But double check the fact that cache_header_lines was indeed the
