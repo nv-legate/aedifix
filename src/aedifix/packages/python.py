@@ -6,13 +6,13 @@ from __future__ import annotations
 import sys
 from typing import TYPE_CHECKING, Final
 
-from ...util.argument_parser import ArgSpec, ConfigArgument
-from ...util.exception import UnsatisfiableConfigurationError
-from ...util.utility import find_active_python_version_and_path
 from ..package import Package
+from ..util.argument_parser import ArgSpec, ConfigArgument
+from ..util.exception import UnsatisfiableConfigurationError
+from ..util.utility import find_active_python_version_and_path
 
 if TYPE_CHECKING:
-    from ...manager import ConfigurationManager
+    from ..manager import ConfigurationManager
 
 
 class Python(Package):
