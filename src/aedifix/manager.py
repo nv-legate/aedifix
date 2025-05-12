@@ -482,7 +482,7 @@ class ConfigurationManager:
             "$ make",
         ]
 
-        from .package.packages.python import Python
+        from .packages.python import Python
 
         if self._get_package(Python).state.enabled():
             install_mess.extend(
