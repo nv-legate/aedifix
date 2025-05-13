@@ -4,6 +4,8 @@
 # SPDX-License-Identifier: Apache-2.0
 from __future__ import annotations
 
+import sys
+
 
 def select_arch_color(arch_value: str) -> str:
     r"""Chooses a random color based on the value of arch_value. This helps to
@@ -42,15 +44,15 @@ def select_arch_color(arch_value: str) -> str:
     return colors[adler32(arch_value.encode()) % len(colors)]
 
 
-def main() -> None:
-    import sys
-
+def main() -> int:
     if len(sys.argv) < 2:  # noqa: PLR2004
         print(f"usage: {sys.argv[0]} ARCH_NAME")  # noqa: T201
-        sys.exit(1)
+        return 1
 
-    print(select_arch_color(sys.argv[1]), end="")  # noqa: T201
+    color = select_arch_color(sys.argv[1])
+    print(color, end="")  # noqa: T201
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
