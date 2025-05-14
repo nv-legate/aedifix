@@ -28,11 +28,6 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 
-@pytest.fixture
-def manager() -> ConfigurationManager:
-    return ConfigurationManager((), DummyMainModule)
-
-
 class TestConfigurationManager:
     @pytest.mark.parametrize(
         "argv", ((), ("--foo",), ("-b", "1", "--bar=baz"))
@@ -79,9 +74,8 @@ class TestConfigurationManager:
         assert (manager._aedifix_root_dir / "aedifix").exists()
         assert (manager._aedifix_root_dir / "aedifix").is_dir()
 
-    def test_setup(
-        self, manager: ConfigurationManager, AEDIFIX_PYTEST_ARCH: str
-    ) -> None:
+    def test_setup(self, AEDIFIX_PYTEST_ARCH: str) -> None:
+        manager = ConfigurationManager((), DummyMainModule)
         orig_argv = deepcopy(manager.argv)
         assert len(manager._modules) == 1
         manager.setup()

@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import re
 import sys
-from pathlib import Path
 from typing import TYPE_CHECKING, Final
 
 from .base import Configurable
@@ -13,6 +12,8 @@ from .util.exception import UnsatisfiableConfigurationError
 from .util.utility import cmake_configure_file
 
 if TYPE_CHECKING:
+    from pathlib import Path
+
     from .manager import ConfigurationManager
 
 
@@ -31,9 +32,7 @@ class ConfigFile(Configurable):
     )
 
     def __init__(
-        self,
-        manager: ConfigurationManager,
-        config_file_template: Path | None = None,
+        self, manager: ConfigurationManager, config_file_template: Path
     ) -> None:
         r"""Construct a Config.
 
@@ -41,15 +40,10 @@ class ConfigFile(Configurable):
         ----------
         manager : ConfigurationManager
             The configuration manager to manage this Config.
-        config_file_template : Path, optional
-            The template file to read, or None to use the default template
-            file.
+        config_file_template : Path
+            The template file to read.
         """
         super().__init__(manager=manager)
-        if config_file_template is None:
-            config_file_template = (
-                Path(__file__).resolve() / "templates" / "variables.mk.in"
-            )
         self._config_file_template = config_file_template.resolve()
 
         config_file = self.template_file
