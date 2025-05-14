@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "aedifix"
 authors = [{name = "NVIDIA Corporation"}]
-license = { text = "Apache-2.0" }
+license = "Apache-2.0"
 description = "aedifix - Build system for Legate libraries"
 classifiers = [
     "Intended Audience :: Developers",

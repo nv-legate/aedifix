@@ -26,7 +26,6 @@ class ConfigFile(Configurable):
     """
 
     __slots__ = (
-        "_cmake_configure_file",
         "_config_file_template",
         "_default_subst",
         "_project_variables_file",
@@ -42,7 +41,7 @@ class ConfigFile(Configurable):
         manager : ConfigurationManager
             The configuration manager to manage this Config.
         config_file_template : Path
-            The template file to read
+            The template file to read.
         """
         super().__init__(manager=manager)
         self._config_file_template = config_file_template.resolve()

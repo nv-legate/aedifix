@@ -372,7 +372,7 @@ class MainPackage(Package, ABC):
         arch_name: str,
         project_dir_name: str,
         project_dir_value: Path,
-        project_config_file_template: Path,
+        project_config_file_template: Path | None = None,
         project_src_dir: Path | None = None,
         default_arch_file_path: Path | None = None,
     ) -> None:
@@ -390,9 +390,11 @@ class MainPackage(Package, ABC):
             The name of the project dir variable, e.g. 'LEGATE_DIR'.
         project_dir_value : Path
             The value of the project dir, e.g. /path/to/legate.
-        project_config_file_template: Path
+        project_config_file_template: Path, optional
             A path to a configure file template to fill out and place under
-            PROJECT_DIR/PROJECT_ARCH on successful configure.
+            PROJECT_DIR/PROJECT_ARCH on successful configure. If not given,
+            a default template file containing PYTHON, CMAKE,
+            CMAKE_BUILD_PARALLEL_LEVEL, and CMAKE_GENERATOR will be used.
         project_src_dir : Path, optional
             The path to the projects source directory for CMake. If not
             provided, ``project_dir_value`` is used instead.
@@ -414,6 +416,11 @@ class MainPackage(Package, ABC):
         assert not arch_name.endswith("_")
         assert arch_name.isupper()
         assert arch_name.endswith("ARCH")
+        if project_config_file_template is None:
+            project_config_file_template = (
+                Path(__file__).parents[1] / "templates" / "variables.mk.in"
+            ).resolve(strict=True)
+
         if not project_config_file_template.exists():
             msg = (
                 f"Project configure file: {project_config_file_template} does "
@@ -426,6 +433,7 @@ class MainPackage(Package, ABC):
                 "not a file"
             )
             raise ValueError(msg)
+
         self._arch_name = arch_name
         self._arch_value, self._arch_value_provenance = (
             self.preparse_arch_value(argv)
@@ -441,9 +449,7 @@ class MainPackage(Package, ABC):
             raise ValueError(msg)
         self._proj_dir_name = project_dir_name
         self._proj_dir_value = project_dir_value.resolve(strict=True)
-        self._proj_config_file_template = (
-            project_config_file_template.resolve()
-        )
+        self._proj_config_file_template = project_config_file_template
         if project_src_dir is None:
             project_src_dir = self._proj_dir_value
         self._proj_src_dir = project_src_dir.resolve(strict=True)

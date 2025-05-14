@@ -5,8 +5,7 @@ from __future__ import annotations
 
 from os import environ
 from pathlib import Path
-from tempfile import NamedTemporaryFile
-from typing import TYPE_CHECKING, Final
+from typing import TYPE_CHECKING
 
 from .dummy_main_package import DummyMainPackage
 
@@ -14,9 +13,6 @@ if TYPE_CHECKING:
     from collections.abc import Sequence
 
     from aedifix.manager import ConfigurationManager
-
-_tmp_file: Final = NamedTemporaryFile()  # noqa: SIM115
-_tmp_path: Final = Path(_tmp_file.name)
 
 
 class DummyMainModule(DummyMainPackage):
@@ -31,7 +27,6 @@ class DummyMainModule(DummyMainPackage):
             arch_name="AEDIFIX_PYTEST_ARCH",
             project_dir_name="AEDIFIX_PYTEST_DIR",
             project_dir_value=Path(environ["AEDIFIX_PYTEST_DIR"]),
-            project_config_file_template=_tmp_path,
         )
 
     @classmethod
