@@ -34,6 +34,9 @@ test = [
 [project.urls]
 homepage = "https://github.com/nv-legate/aedifix"
 
+[project.scripts]
+aedifix-select-arch-color = "aedifix.scripts.select_arch_color:main"
+
 [tool.setuptools_scm]
 write_to = "src/aedifix/_version.py"
 
