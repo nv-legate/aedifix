@@ -6,8 +6,6 @@ from __future__ import annotations
 import re
 import enum
 import shlex
-import platform
-import sysconfig
 import subprocess
 from pathlib import Path
 from signal import SIGINT
@@ -19,7 +17,6 @@ from subprocess import (
     Popen,
     TimeoutExpired,
 )
-from sys import version_info
 from typing import TYPE_CHECKING, Any, Final, TypeVar
 
 from .exception import CommandError
@@ -251,54 +248,6 @@ class ValueProvenance(enum.Enum):
     COMMAND_LINE = enum.auto()
     ENVIRONMENT = enum.auto()
     GENERATED = enum.auto()
-
-
-def find_active_python_version_and_path() -> tuple[str, Path]:
-    r"""Determine the current Python version and the path to its shared
-    library.
-
-    Returns
-    -------
-    version : str
-        The current Python version as a string.
-    lib_path : Path
-        The full path to the python shared library.
-
-    Raises
-    ------
-    FileNotFoundError
-        If the python shared library could not be located.
-    """
-    # Launching a sub-process to do this in a general way seems hard
-    version = f"{version_info.major}.{version_info.minor}.{version_info.micro}"
-    cv = sysconfig.get_config_vars()
-    # Homebrew or pkg mgr installations may give bad values for LDLIBRARY.
-    # Uses a fallback default path in case LDLIBRARY fails.
-    default_libname = f"libpython{cv['LDVERSION']}.a"
-    libdirs = [str(cv["LIBDIR"]), str(cv["LIBPL"])]
-    libnames = [str(cv["LDLIBRARY"]), default_libname]
-    paths = [
-        libdir / libname
-        for libdir in map(Path, libdirs)
-        for libname in libnames
-    ]
-    # ensure that static libraries are replaced with the dynamic version
-    shlib_suffix = ".dylib" if platform.system() == "Darwin" else ".so"
-    paths = [p.with_suffix(shlib_suffix) for p in paths]
-    paths = [p for p in paths if p.is_file()]
-    try:
-        py_lib_path = paths[0]
-    except IndexError as ie:
-        msg = "Could not auto-locate Python library"
-        raise FileNotFoundError(msg) from ie
-
-    if not py_lib_path.exists():
-        msg = (
-            "Could not auto-locate Python library, "
-            f"found library ({py_lib_path}) does not appear to exist"
-        )
-        raise RuntimeError(msg)
-    return version, py_lib_path
 
 
 def prune_command_line_args(
