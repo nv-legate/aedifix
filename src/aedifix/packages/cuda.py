@@ -117,7 +117,10 @@ class CUDA(Package):
         spec=ArgSpec(
             dest="cuda_arch",
             required=False,
-            default=["all-major"],
+            default=os.environ.get(
+                "CUDAARCHS",
+                os.environ.get("CMAKE_CUDA_ARCHITECTURES", "all-major"),
+            ),
             action=CudaArchAction,
             help=(
                 "Specify the target GPU architecture. Available choices are: "
