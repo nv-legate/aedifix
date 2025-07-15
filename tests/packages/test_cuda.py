@@ -7,7 +7,7 @@ import sys
 
 import pytest
 
-from aedifix.packages.cuda import CudaArchAction
+from aedifix.packages.cuda import CudaArchAction, _guess_cuda_architecture
 
 ARCH_STR: tuple[tuple[str, list[str]], ...] = (
     ("", []),
@@ -26,6 +26,28 @@ class TestCudaArchAction:
     def test_map_cuda_arch_names(self, argv: str, expected: list[str]) -> None:
         ret = CudaArchAction.map_cuda_arch_names(argv)
         assert ret == expected
+
+
+class TestCUDA:
+    @pytest.mark.parametrize(
+        ("env_var", "env_value", "expected"),
+        [
+            ("CUDAARCHS", "volta", "volta"),
+            ("CMAKE_CUDA_ARCHITECTURES", "75", "75"),
+            ("", "", "all-major"),
+        ],
+    )
+    def test_default_cuda_arches(
+        self,
+        monkeypatch: pytest.MonkeyPatch,
+        env_var: str,
+        env_value: str,
+        expected: str,
+    ) -> None:
+        if env_var:
+            monkeypatch.setenv(env_var, env_value)
+
+        assert _guess_cuda_architecture() == expected
 
 
 if __name__ == "__main__":

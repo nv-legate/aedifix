@@ -27,6 +27,20 @@ def _guess_cuda_compiler() -> str | None:
     return None
 
 
+def _guess_cuda_architecture() -> str:
+    try:
+        return os.environ["CUDAARCHS"]
+    except KeyError:
+        pass
+
+    try:
+        return os.environ["CMAKE_CUDA_ARCHITECTURES"]
+    except KeyError:
+        pass
+
+    return "all-major"
+
+
 class CudaArchAction(Action):
     @staticmethod
     def map_cuda_arch_names(in_arch: str) -> list[str]:
