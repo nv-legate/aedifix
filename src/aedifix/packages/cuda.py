@@ -10,7 +10,13 @@ from argparse import Action, ArgumentParser, Namespace
 from pathlib import Path
 from typing import TYPE_CHECKING, Final
 
-from ..cmake import CMAKE_VARIABLE, CMakeExecutable, CMakeList, CMakePath
+from ..cmake import (
+    CMAKE_VARIABLE,
+    CMakeExecutable,
+    CMakeList,
+    CMakePath,
+    CMakeSemiColonList,
+)
 from ..package import Package
 from ..util.argument_parser import ArgSpec, ConfigArgument
 
@@ -143,7 +149,9 @@ class CUDA(Package):
                 "'ampere' or 'hopper, blackwell'"
             ),
         ),
-        cmake_var=CMAKE_VARIABLE("CMAKE_CUDA_ARCHITECTURES", CMakeList),
+        cmake_var=CMAKE_VARIABLE(
+            "CMAKE_CUDA_ARCHITECTURES", CMakeSemiColonList
+        ),
     )
 
     def configure(self) -> None:

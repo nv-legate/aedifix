@@ -237,13 +237,21 @@ class CMakeList(CMakeFlagBase):
             val = [v for v in (str(x).strip() for x in val) if v]
         return bool(val), val
 
-    def to_command_line(self, *, quote: bool = False) -> str:
+    def _cmake_list_to_command_line(self, *, quote: bool, sep: str) -> str:
         if (val := self.value) is None:
             val = []
-        val = ";".join(map(str, val))
+        val = sep.join(map(str, val))
         if quote:
             val = shlex_quote(val)
         return f"{self.prefix}{self.name}:{self.type}={val}"
+
+    def to_command_line(self, *, quote: bool = False) -> str:
+        return self._cmake_list_to_command_line(quote=quote, sep=" ")
+
+
+class CMakeSemiColonList(CMakeList):
+    def to_command_line(self, *, quote: bool = False) -> str:
+        return self._cmake_list_to_command_line(quote=quote, sep=";")
 
 
 class CMakeBool(CMakeFlagBase):

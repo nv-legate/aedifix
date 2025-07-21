@@ -13,6 +13,7 @@ from .cmake import (
     CMakeList,
     CMakePath,
     CMaker,
+    CMakeSemiColonList,
     CMakeString,
 )
 from .main import basic_configure
@@ -28,6 +29,7 @@ __all__ = (
     "CMakeInt",
     "CMakeList",
     "CMakePath",
+    "CMakeSemiColonList",
     "CMakeString",
     "CMaker",
     "ConfigArgument",

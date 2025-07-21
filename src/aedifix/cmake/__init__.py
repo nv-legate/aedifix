@@ -10,6 +10,7 @@ from .cmake_flags import (
     CMakeInt,
     CMakeList,
     CMakePath,
+    CMakeSemiColonList,
     CMakeString,
 )
 from .cmaker import CMaker
@@ -21,6 +22,7 @@ __all__ = (
     "CMakeInt",
     "CMakeList",
     "CMakePath",
+    "CMakeSemiColonList",
     "CMakeString",
     "CMaker",
 )

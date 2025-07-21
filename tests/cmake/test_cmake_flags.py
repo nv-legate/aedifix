@@ -18,6 +18,7 @@ from aedifix.cmake.cmake_flags import (
     CMakeInt,
     CMakeList,
     CMakePath,
+    CMakeSemiColonList,
     CMakeString,
 )
 
@@ -81,7 +82,7 @@ class TestCMakeList:
         var = CMakeList("foo", value=value)
         cmd = var.to_command_line()
         assert isinstance(cmd, str)
-        expected_str = "" if val_copy is None else ";".join(map(str, val_copy))
+        expected_str = "" if val_copy is None else " ".join(map(str, val_copy))
         assert cmd == f"-Dfoo:STRING={expected_str}"
         assert var.value == val_copy
 
@@ -100,6 +101,90 @@ class TestCMakeList:
         assert lhs != rhs
 
         rhs = CMakeList("foo", value=(1, 2, 3), prefix="asdasd")
+        assert lhs != rhs
+
+        rhs_b = CMakeBool("foo", value=None, prefix="asdasd")
+        assert lhs != rhs_b
+
+
+class TestCMakeSemiColonList:
+    def test_create(self) -> None:
+        var = CMakeSemiColonList("foo")
+        assert var.name == "foo"
+        assert var.value is None
+        assert var.prefix == "-D"
+        assert var.type == "STRING"
+
+        var = CMakeSemiColonList("foo", value=[1, 2, 3])
+        assert var.name == "foo"
+        assert var.value == [1, 2, 3]
+        assert var.prefix == "-D"
+        assert var.type == "STRING"
+
+        var = CMakeSemiColonList("foo", value=(1, 2, 3), prefix="bar")
+        assert var.name == "foo"
+        assert var.value == [1, 2, 3]
+        assert var.prefix == "bar"
+        assert var.type == "STRING"
+
+        var = CMakeSemiColonList("foo", value="foo;bar")
+        assert var.name == "foo"
+        assert var.value == ["foo", "bar"]
+        assert var.prefix == "-D"
+        assert var.type == "STRING"
+
+    def test_create_bad(self) -> None:
+        # looking for "<class 'int'>" here
+        with pytest.raises(TypeError, match=re.escape(rf"{int}")):
+            CMakeSemiColonList("foo", value=1)  # type: ignore[arg-type]
+
+    def test_canonicalize(self) -> None:
+        var = CMakeSemiColonList("foo")
+        canon = var.canonicalize()
+        assert canon is None
+        assert id(canon) != id(var)  # must be distinct
+        assert var.name == "foo"
+        assert var.value is None
+        assert var.prefix == "-D"
+        assert var.type == "STRING"
+
+        var.value = [4, 5, 6]
+        canon = var.canonicalize()
+        assert isinstance(canon, CMakeSemiColonList)
+        assert id(canon) != id(var)  # must be distinct
+        assert canon.name == var.name
+        assert canon.value == list(map(str, var.value))
+        assert id(canon.value) != id(var.value)  # must be distinct
+        assert canon.prefix == var.prefix
+        assert canon.type == var.type
+
+    @pytest.mark.parametrize(
+        "value", (None, [], ["1"], ["1", "2"], [34, 99, 999])
+    )
+    def test_to_command_line(self, value: list[str]) -> None:
+        val_copy = copy.deepcopy(value)
+        var = CMakeSemiColonList("foo", value=value)
+        cmd = var.to_command_line()
+        assert isinstance(cmd, str)
+        expected_str = "" if val_copy is None else ";".join(map(str, val_copy))
+        assert cmd == f"-Dfoo:STRING={expected_str}"
+        assert var.value == val_copy
+
+    def test_eq(self) -> None:
+        lhs = CMakeSemiColonList("foo", value=(1, 2, 3), prefix="bar")
+        rhs = CMakeSemiColonList("foo", value=(1, 2, 3), prefix="bar")
+        assert lhs == rhs
+
+    def test_neq(self) -> None:
+        lhs = CMakeSemiColonList("foo", value=(1, 2, 3), prefix="bar")
+
+        rhs = CMakeSemiColonList("bar", value=(1, 2, 3), prefix="bar")
+        assert lhs != rhs
+
+        rhs = CMakeSemiColonList("foo", value=(1, 2, 3, 4), prefix="bar")
+        assert lhs != rhs
+
+        rhs = CMakeSemiColonList("foo", value=(1, 2, 3), prefix="asdasd")
         assert lhs != rhs
 
         rhs_b = CMakeBool("foo", value=None, prefix="asdasd")
