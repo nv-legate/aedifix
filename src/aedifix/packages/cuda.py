@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import os
+import re
 import shutil
 from argparse import Action, ArgumentParser, Namespace
 from pathlib import Path
@@ -55,7 +56,7 @@ class CudaArchAction(Action):
             # TODO(jfaibussowit): rubin?
         }
         arch = []
-        for sub_arch in in_arch.split(","):
+        for sub_arch in re.split(r"[;,]", in_arch):
             # support Turing, TURING, and, if the user is feeling spicy, tUrInG
             sub_arch_lo = sub_arch.strip().casefold()
             if not sub_arch_lo:
@@ -131,7 +132,9 @@ class CUDA(Package):
         spec=ArgSpec(
             dest="cuda_arch",
             required=False,
-            default=_guess_cuda_architecture(),
+            default=CudaArchAction.map_cuda_arch_names(
+                _guess_cuda_architecture()
+            ),
             action=CudaArchAction,
             help=(
                 "Specify the target GPU architecture. Available choices are: "

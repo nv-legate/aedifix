@@ -18,6 +18,7 @@ ARCH_STR: tuple[tuple[str, list[str]], ...] = (
     ("turing,hopper", ["75", "90"]),
     ("volta,60,all-major", ["70", "60", "all-major"]),
     ("60,,80", ["60", "80"]),
+    ("50-real;120-real;121", ["50-real", "120-real", "121"]),
 )
 
 
@@ -33,6 +34,7 @@ class TestCUDA:
         ("env_var", "env_value", "expected"),
         [
             ("CUDAARCHS", "volta", "volta"),
+            ("CUDAARCHS", "volta;ampere", "volta;ampere"),
             ("CMAKE_CUDA_ARCHITECTURES", "75", "75"),
             ("", "", "all-major"),
         ],
