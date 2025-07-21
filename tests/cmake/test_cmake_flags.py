@@ -81,7 +81,7 @@ class TestCMakeList:
         var = CMakeList("foo", value=value)
         cmd = var.to_command_line()
         assert isinstance(cmd, str)
-        expected_str = "" if val_copy is None else " ".join(map(str, val_copy))
+        expected_str = "" if val_copy is None else ";".join(map(str, val_copy))
         assert cmd == f"-Dfoo:STRING={expected_str}"
         assert var.value == val_copy
 

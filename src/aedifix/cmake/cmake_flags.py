@@ -240,7 +240,7 @@ class CMakeList(CMakeFlagBase):
     def to_command_line(self, *, quote: bool = False) -> str:
         if (val := self.value) is None:
             val = []
-        val = " ".join(map(str, val))
+        val = ";".join(map(str, val))
         if quote:
             val = shlex_quote(val)
         return f"{self.prefix}{self.name}:{self.type}={val}"
