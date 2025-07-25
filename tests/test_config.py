@@ -39,7 +39,7 @@ class TestConfigFile:
             "PYTHON_EXECUTABLE": sys.executable,
             "PROJECT_ARCH_NAME": "AEDIFIX_PYTEST_ARCH",
             "PROJECT_DIR_NAME": "AEDIFIX_PYTEST_DIR",
-            "PROJECT_NAME": "DUMMYMAINMODULE",
+            "PROJECT_NAME_UPPER": "DUMMYMAINMODULE",
         }
 
     @pytest.mark.parametrize(
