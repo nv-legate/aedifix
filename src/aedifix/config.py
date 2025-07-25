@@ -52,7 +52,12 @@ class ConfigFile(Configurable):
             config_file = config_file.with_suffix("")
 
         self._project_variables_file = self.project_arch_dir / config_file.name
-        self._default_subst = {"PYTHON_EXECUTABLE": sys.executable}
+        self._default_subst = {
+            "PYTHON_EXECUTABLE": sys.executable,
+            "PROJECT_NAME_UPPER": manager.project_name_upper,
+            "PROJECT_DIR_NAME": manager.project_dir_name,
+            "PROJECT_ARCH_NAME": manager.project_arch_name,
+        }
 
     @property
     def template_file(self) -> Path:
