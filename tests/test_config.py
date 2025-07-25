@@ -35,7 +35,12 @@ class TestConfigFile:
         assert (
             config.project_variables_file.name == template.with_suffix("").name
         )
-        assert config._default_subst == {"PYTHON_EXECUTABLE": sys.executable}
+        assert config._default_subst == {
+            "PYTHON_EXECUTABLE": sys.executable,
+            "PROJECT_ARCH_NAME": "AEDIFIX_PYTEST_ARCH",
+            "PROJECT_DIR_NAME": "AEDIFIX_PYTEST_DIR",
+            "PROJECT_NAME": "DUMMYMAINMODULE",
+        }
 
     @pytest.mark.parametrize(
         ("base", "expected"),
