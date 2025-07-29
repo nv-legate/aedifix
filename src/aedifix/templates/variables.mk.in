@@ -3,7 +3,7 @@
 # subsequent calls to configure (or reconfigure) will overwrite any changes.
 .NOTPARALLEL:
 
-export SHELL ?= /usr/bin/env bash
+export SHELL = /usr/bin/env bash
 export AWK ?= awk
 export PYTHON ?= @AEDIFIX_PYTHON_EXECUTABLE@
 export CMAKE ?= @CMAKE_COMMAND@
