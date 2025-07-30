@@ -116,3 +116,6 @@ aedifix-default-help:
       } \
     }' \
     $(MAKEFILE_LIST)
+
+## run `make aedifix-print-VARNAME` to get info about the variable `VARNAME`
+aedifix-print-% : ; $(info $* is a $(flavor $*) variable from $(origin $*) set to [$(value $*)] ) @true
