@@ -77,9 +77,12 @@ class TestConfigurationManager:
     def test_setup(self, AEDIFIX_PYTEST_ARCH: str) -> None:
         manager = ConfigurationManager((), DummyMainModule)
         orig_argv = deepcopy(manager.argv)
+        # Only the main module
         assert len(manager._modules) == 1
         manager.setup()
-        assert len(manager._modules) == 1
+        # 4 modules: The main module, and the default modules (currently only
+        # 3, CMake, CUDA, and Python).
+        assert len(manager._modules) == 4
         assert manager.argv == orig_argv
         assert (
             CLArg(
