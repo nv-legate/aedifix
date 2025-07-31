@@ -313,7 +313,7 @@ class Package(Configurable):
             self.log(f"{self.name}: always enabled")
             return Package.EnableState(value=True, explicit=False)
 
-        config_args = []
+        config_args: list[ConfigArgument] = []
         primary_attr = None
         for attr_name in dir(self):
             try:
@@ -329,21 +329,29 @@ class Package(Configurable):
                 # enabling the package
                 continue
 
-            config_args.append(attr)
             if attr.primary:
                 assert primary_attr is None, (
                     "Multiple primary ConfigArgument's, previously "
-                    f"found {attr}"
+                    f"found {primary_attr}"
                 )
                 primary_attr = attr
+                # The primary attribute, if it is explicitly set by the user,
+                # should ultimately control whether the package is enabled or
+                # disabled, so we check it first
+                primary_val = getattr(self.cl_args, attr.spec.dest)
+                if primary_val.cl_set:
+                    return Package.EnableState(
+                        value=bool(primary_val.value), explicit=True
+                    )
+                # The primary attribute is always checked first
+                config_args.insert(0, attr)
+            else:
+                config_args.append(attr)
 
         assert primary_attr is not None, (
             f"Never found primary config argument for {self.name}"
         )
 
-        # The primary attribute, if set, should ultimately control whether the
-        # package is enabled or disabled, so we check it first
-        config_args.insert(0, primary_attr)
         for arg in config_args:
             cl_arg = getattr(self.cl_args, arg.spec.dest)
             if (val := cl_arg.value) is not None:
