@@ -482,7 +482,7 @@ class ConfigurationManager:
             "$ make",
         ]
 
-        from .packages.python import Python
+        from .packages import Python
 
         if self._get_package(Python).state.enabled():
             install_mess.extend(
@@ -507,8 +507,12 @@ class ConfigurationManager:
         # that are reachable starting from the main package dependencies.
         # ref: https://en.wikipedia.org/wiki/Depth-first_search#Pseudocode
 
+        from .packages import _all_default_packages
+
         seen: set[type[Package]] = set()
-        stack: list[type[Package]] = list(self._main_package.dependencies)
+        stack: list[type[Package]] = (
+            list(self._main_package.dependencies) + _all_default_packages()
+        )
 
         while stack:
             if (dep := stack.pop()) not in seen:
